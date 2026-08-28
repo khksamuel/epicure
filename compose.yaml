@@ -1,0 +1,36 @@
+services:
+  model-service:
+    build:
+      context: services/model-service
+    restart: unless-stopped
+    volumes:
+      - huggingface-cache:/root/.cache/huggingface
+    environment:
+      EPICURE_MODEL_COOC: ${EPICURE_MODEL_COOC:-Kaikaku/epicure-cooc}
+      EPICURE_MODEL_CORE: ${EPICURE_MODEL_CORE:-Kaikaku/epicure-core}
+      EPICURE_MODEL_CHEM: ${EPICURE_MODEL_CHEM:-Kaikaku/epicure-chem}
+      EPICURE_MODEL_COOC_REVISION: ${EPICURE_MODEL_COOC_REVISION:-}
+      EPICURE_MODEL_CORE_REVISION: ${EPICURE_MODEL_CORE_REVISION:-}
+      EPICURE_MODEL_CHEM_REVISION: ${EPICURE_MODEL_CHEM_REVISION:-}
+      HF_TOKEN: ${HF_TOKEN:-}
+
+  api:
+    build:
+      context: services/api
+    restart: unless-stopped
+    depends_on:
+      - model-service
+    environment:
+      EPICURE_MODEL_SERVICE_BASE_URL: http://model-service:8000
+
+  frontend:
+    build:
+      context: frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+volumes:
+  huggingface-cache:
