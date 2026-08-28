@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920" role="img" aria-labelledby="title desc">
+  <title id="title">Kitchen Compass visual design directions</title>
+  <desc id="desc">Three visual directions: Canteen Modern, Field Notes, and Night Service.</desc>
+  <rect width="1600" height="920" fill="#e8e5dc"/>
+  <g font-family="Arial, sans-serif">
+    <text x="70" y="72" font-size="20" font-weight="700" fill="#172522" letter-spacing="3">KITCHEN COMPASS / VISUAL DIRECTIONS</text>
+    <text x="70" y="112" font-size="18" fill="#172522" opacity=".65">Three possible moods for the chef-facing flavour workspace</text>
+    <g transform="translate(70 160)">
+      <rect width="460" height="680" rx="24" fill="#f6f5ef" stroke="#172522" stroke-opacity=".15"/>
+      <rect width="460" height="190" rx="24" fill="#242a29"/>
+      <rect y="166" width="460" height="24" fill="#242a29"/>
+      <text x="32" y="46" font-size="14" font-weight="700" fill="#d8e55f" letter-spacing="2">CANTEEN MODERN</text>
+      <text x="32" y="102" font-size="38" font-weight="700" fill="#fffdf7">Make room for</text>
+      <text x="32" y="142" font-size="38" font-weight="700" fill="#fffdf7">a better idea.</text>
+      <rect x="28" y="220" width="404" height="58" rx="10" fill="#fff" stroke="#172522" stroke-opacity=".15"/>
+      <text x="48" y="256" font-size="15" fill="#172522" opacity=".55">Search an ingredient</text>
+      <rect x="306" y="230" width="112" height="38" rx="8" fill="#315b4b"/>
+      <text x="322" y="254" font-size="12" font-weight="700" fill="#fff">EXPLORE</text>
+      <text x="28" y="326" font-size="24" font-weight="700" fill="#172522">Miso pairings</text>
+      <rect x="28" y="352" width="190" height="126" rx="14" fill="#fff" stroke="#172522" stroke-opacity=".12"/>
+      <rect x="238" y="352" width="194" height="126" rx="14" fill="#fff" stroke="#172522" stroke-opacity=".12"/>
+      <circle cx="62" cy="390" r="13" fill="#d8e55f"/><circle cx="101" cy="420" r="9" fill="#315b4b"/><circle cx="143" cy="391" r="10" fill="#d77a4b"/>
+      <text x="48" y="454" font-size="15" font-weight="700" fill="#172522">Common pairings</text>
+      <text x="258" y="394" font-size="15" font-weight="700" fill="#172522">Flavour surprises</text>
+      <text x="258" y="424" font-size="13" fill="#172522" opacity=".6">A professional, clear</text><text x="258" y="445" font-size="13" fill="#172522" opacity=".6">kitchen workbench.</text>
+      <text x="28" y="610" font-size="14" fill="#315b4b" font-weight="700">Best for clarity and credibility</text>
+    </g>
+    <g transform="translate(570 160)">
+      <rect width="460" height="680" rx="24" fill="#e7e1d0" stroke="#425b48" stroke-opacity=".25"/>
+      <rect width="460" height="190" rx="24" fill="#355948"/>
+      <rect y="166" width="460" height="24" fill="#355948"/>
+      <text x="32" y="46" font-size="14" font-weight="700" fill="#e7ef9a" letter-spacing="2">FIELD NOTES</text>
+      <text x="32" y="102" font-size="38" font-family="Georgia, serif" fill="#fffdf5">Follow the</text>
+      <text x="32" y="142" font-size="38" font-family="Georgia, serif" fill="#fffdf5">interesting thread.</text>
+      <rect x="28" y="220" width="404" height="58" rx="10" fill="#f8f4e8" stroke="#355948" stroke-opacity=".2"/>
+      <text x="48" y="256" font-size="15" fill="#355948" opacity=".7">Start with an ingredient</text>
+      <text x="28" y="326" font-size="24" font-family="Georgia, serif" fill="#273d31">A wider flavour neighbourhood</text>
+      <rect x="28" y="352" width="404" height="98" rx="14" fill="#f8f4e8"/>
+      <path d="M55 413 C120 355 165 442 225 385 S345 420 408 372" fill="none" stroke="#bdc950" stroke-width="5"/>
+      <circle cx="55" cy="413" r="9" fill="#bdc950"/><circle cx="225" cy="385" r="9" fill="#bdc950"/><circle cx="408" cy="372" r="9" fill="#bdc950"/>
+      <text x="28" y="512" font-size="17" fill="#355948" font-weight="700">Notes from the kitchen</text>
+      <line x1="28" y1="540" x2="432" y2="540" stroke="#355948" stroke-opacity=".25"/><line x1="28" y1="580" x2="432" y2="580" stroke="#355948" stroke-opacity=".25"/><line x1="28" y1="620" x2="350" y2="620" stroke="#355948" stroke-opacity=".25"/>
+      <text x="28" y="670" font-size="14" fill="#355948" font-weight="700">Best for discovery and storytelling</text>
+    </g>
+    <g transform="translate(1070 160)">
+      <rect width="460" height="680" rx="24" fill="#171a19" stroke="#f2eee3" stroke-opacity=".18"/>
+      <rect width="460" height="190" rx="24" fill="#101211"/>
+      <rect y="166" width="460" height="24" fill="#101211"/>
+      <text x="32" y="46" font-size="14" font-weight="700" fill="#f07b4f" letter-spacing="2">NIGHT SERVICE</text>
+      <text x="32" y="102" font-size="38" font-weight="700" fill="#f2eee3">Push the dish</text>
+      <text x="32" y="142" font-size="38" font-weight="700" fill="#f2eee3">somewhere new.</text>
+      <rect x="28" y="220" width="404" height="58" rx="10" fill="#232725" stroke="#f2eee3" stroke-opacity=".22"/>
+      <text x="48" y="256" font-size="15" fill="#f2eee3" opacity=".55">Enter ingredient</text>
+      <rect x="28" y="320" width="404" height="76" rx="12" fill="#242a27"/>
+      <text x="48" y="350" font-size="13" fill="#f07b4f" font-weight="700">CHEMISTRY</text><text x="48" y="378" font-size="17" fill="#f2eee3">Unexpected but plausible</text>
+      <rect x="28" y="416" width="194" height="126" rx="12" fill="#242a27"/><rect x="238" y="416" width="194" height="126" rx="12" fill="#242a27"/>
+      <text x="48" y="456" font-size="15" font-weight="700" fill="#f2eee3">Choose a lens</text><text x="48" y="484" font-size="13" fill="#f2eee3" opacity=".55">Core / Cooc / Chem</text>
+      <text x="258" y="456" font-size="15" font-weight="700" fill="#f2eee3">Steer flavour</text><text x="258" y="484" font-size="13" fill="#f2eee3" opacity=".55">A gentle nudge to bold</text>
+      <text x="28" y="610" font-size="14" fill="#f07b4f" font-weight="700">Best for premium and experimental work</text>
+    </g>
+  </g>
+</svg>

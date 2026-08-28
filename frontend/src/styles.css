@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Newsreader", serif;
+  --color-ink: #25352f;
+  --color-moss: #355b49;
+  --color-leaf: #d9df77;
+  --color-citrus: #d9df77;
+  --color-clay: #a64232;
+  --color-linen: #f1eddc;
+  --color-paper: #f8f5e9;
+  --color-pencil: #667068;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply m-0 bg-linen font-sans text-ink antialiased;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2;
+  }
+  ::selection {
+    @apply bg-leaf text-ink;
+  }
+  * {
+    scrollbar-color: #809084 #f1eddc;
+    scrollbar-width: thin;
+  }
+}
+
+@layer components {
+  .field {
+    @apply min-h-12 w-full rounded-lg border border-ink/20 bg-paper px-4 text-[15px] text-ink shadow-[0_1px_0_rgb(37_53_47/.08)] outline-none transition duration-200 placeholder:text-pencil/70 hover:border-moss/45 focus:border-moss focus:ring-4 focus:ring-leaf/35;
+  }
+
+  .action {
+    @apply inline-flex min-h-12 shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-5 text-sm font-semibold transition duration-200 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .action-primary {
+    @apply bg-moss text-white shadow-[0_8px_22px_rgb(53_91_73/.18)] hover:bg-ink hover:shadow-[0_5px_14px_rgb(53_91_73/.2)];
+  }
+
+  .action-accent {
+    @apply bg-leaf text-ink shadow-[0_8px_22px_rgb(151_160_69/.18)] hover:bg-[#cbd45b] hover:shadow-[0_5px_14px_rgb(151_160_69/.22)];
+  }
+
+  .paper-section {
+    @apply rounded-2xl border border-ink/15 bg-paper shadow-[0_16px_45px_rgb(42_58_51/.07)];
+  }
+
+  .section-title {
+    @apply max-w-[18ch] font-display text-4xl leading-[1.02] tracking-[-.025em] text-ink sm:text-5xl;
+  }
+
+  .section-copy {
+    @apply mt-3 max-w-[62ch] text-sm leading-6 text-pencil;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
