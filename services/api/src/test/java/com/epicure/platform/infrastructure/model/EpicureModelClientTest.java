@@ -9,10 +9,12 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 
 class EpicureModelClientTest {
 
@@ -65,6 +67,44 @@ class EpicureModelClientTest {
         );
 
         assertThat(result).extracting(item -> item.ingredient()).containsExactly("cardamom");
+        server.verify();
+    }
+
+    @Test
+    void supportsTheRemainingModelServiceOperations() {
+        server.expect(requestTo("http://model-service/health"))
+                .andRespond(withSuccess("{\"status\":\"ok\",\"models\":{}}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://model-service/v1/models"))
+                .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://model-service/v1/models/cooc/ingredients?query=app&limit=2"))
+                .andRespond(withSuccess("[\"apple\"]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://model-service/v1/models/chem/modes/closest/apple?kind=factor&k=2"))
+                .andRespond(withSuccess("[{\"mode_id\":\"F_0/M1\",\"label\":\"Fruit\",\"score\":0.9}]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://model-service/v1/models/core/modes?kind=binary"))
+                .andRespond(withSuccess("[{\"mode_id\":\"food_group/M1\",\"label\":\"Aromatics\"}]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://model-service/v1/models/core/modes/F_0%2FM1/members?k=1"))
+                .andRespond(withSuccess("[\"apple\"]", MediaType.APPLICATION_JSON));
+        server.expect(requestTo("http://model-service/v1/models/cooc/poles?prefix=taste:"))
+                .andRespond(withSuccess("[\"taste:savoury\"]", MediaType.APPLICATION_JSON));
+
+        assertThat(client.health().status()).isEqualTo("ok");
+        assertThat(client.models()).isEmpty();
+        assertThat(client.ingredients(ModelSibling.COOC, "app", 2)).containsExactly("apple");
+        assertThat(client.closestModes(ModelSibling.CHEM, "apple", "factor", 2)).hasSize(1);
+        assertThat(client.modes(ModelSibling.CORE, "binary")).hasSize(1);
+        assertThat(client.modeMembers(ModelSibling.CORE, "F_0/M1", 1)).containsExactly("apple");
+        assertThat(client.poles(ModelSibling.COOC, "taste:")).containsExactly("taste:savoury");
+        server.verify();
+    }
+
+    @Test
+    void translatesModelServiceFailures() {
+        server.expect(requestTo("http://model-service/v1/models"))
+                .andRespond(withServerError().body("backend unavailable"));
+
+        assertThatThrownBy(() -> client.models())
+                .isInstanceOf(ModelServiceException.class)
+                .hasMessage("backend unavailable");
         server.verify();
     }
 }

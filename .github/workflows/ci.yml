@@ -51,6 +51,9 @@ jobs:
           npm run build
 
       - name: Upload coverage reports to Codecov
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: services/api/target/site/jacoco/jacoco.xml,frontend/coverage/lcov.info,services/model-service/coverage.xml
+          fail_ci_if_error: true

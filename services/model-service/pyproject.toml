@@ -21,11 +21,13 @@ dependencies = [
 test = [
   "httpx>=0.28,<1",
   "pytest>=8.3,<10",
+  "pytest-cov>=7.1,<8",
 ]
 dev = [
   "httpx>=0.28,<1",
   "pip-tools>=7.4,<8",
   "pytest>=8.3,<10",
+  "pytest-cov>=7.1,<8",
   "ruff>=0.11,<1",
 ]
 
@@ -37,9 +39,17 @@ packages = ["src/epicure", "src/epicure_backend"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--cov --cov-report=term-missing --cov-report=xml:coverage.xml"
 markers = [
   "network: downloads and validates the released Hugging Face models",
 ]
+
+[tool.coverage.run]
+branch = true
+source = ["src/epicure", "src/epicure_backend"]
+
+[tool.coverage.report]
+omit = ["src/epicure_backend/__main__.py"]
 
 [tool.ruff]
 target-version = "py311"
