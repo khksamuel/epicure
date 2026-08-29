@@ -1,6 +1,6 @@
 import { IngredientAutocomplete } from "./IngredientAutocomplete";
 
-export function IngredientSearch({ value, onChange, onSubmit, message }) {
+export function IngredientSearch({ value, onChange, onSubmit, message, isError = false }) {
   return (
     <section className="paper-section p-5 sm:p-7">
       <div className="grid gap-6 md:grid-cols-[.8fr_1.2fr] md:items-center">
@@ -31,7 +31,7 @@ export function IngredientSearch({ value, onChange, onSubmit, message }) {
           </div>
         </div>
       </div>
-      <p className="mt-3 min-h-5 text-sm font-medium text-clay" role="status">
+      <p className="mt-3 min-h-5 text-sm font-medium text-clay" role={isError ? "alert" : "status"}>
         {message}
       </p>
     </section>
