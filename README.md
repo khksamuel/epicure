@@ -20,7 +20,8 @@ independently scalable.
 This platform builds on [_Epicure: Navigating the Emergent Geometry of Food Ingredient
 Embeddings_](https://arxiv.org/abs/2605.22391) by Jakub Radzikowski and Josef Chen (2026).
 The paper introduces the Cooc, Core, and Chem embedding spaces used throughout the
-application.
+application. Many thanks to the authors for publishing the model checkpoints on
+[Hugging Face](https://huggingface.co/Kaikaku), which this platform uses directly.
 
 ## Chef workspaces
 
