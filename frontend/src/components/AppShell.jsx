@@ -11,7 +11,7 @@ const NAV_ITEMS = [
 
 export function AppShell() {
   return (
-    <div className={`${styles.pageAtmosphere} min-h-[100dvh] text-ink`}>
+    <div className={`${styles.pageAtmosphere} min-h-dvh text-ink`}>
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
