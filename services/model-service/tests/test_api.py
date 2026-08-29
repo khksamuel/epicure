@@ -11,6 +11,10 @@ def test_api_and_compare_contract(sample_registry):
         assert health.status_code == 200
         assert health.json()["models"]["cooc"]["loaded"] is False
 
+        ingredients = client.get("/v1/models/cooc/ingredients")
+        assert ingredients.status_code == 200
+        assert ingredients.json() == ["apple", "onion", "pear", "salt"]
+
         neighbors = client.get("/v1/models/cooc/neighbors/apple?k=2")
         assert neighbors.status_code == 200
         assert neighbors.json()[0]["ingredient"] == "pear"

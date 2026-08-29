@@ -31,4 +31,14 @@ describe("epicureApi", () => {
       }),
     );
   });
+
+  it("requests the complete ingredient vocabulary without a client-side limit", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ["miso", "rice"],
+    });
+
+    await expect(epicureApi.ingredients()).resolves.toEqual(["miso", "rice"]);
+    expect(fetch).toHaveBeenCalledWith("/v1/models/cooc/ingredients", expect.anything());
+  });
 });
