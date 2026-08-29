@@ -30,3 +30,9 @@ for temporary diagnostics:
 ```
 
 Run `npm run check` to execute ESLint, Vitest, and a production build.
+
+For a Docker-based frontend test pass, from the repository root:
+
+```bash
+docker compose --profile test run --rm test-frontend
+```

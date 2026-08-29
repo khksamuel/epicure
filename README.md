@@ -147,18 +147,19 @@ $env:EPICURE_MODEL_CHEM = "your-name/community-chem-v2"
 Each model supplies `embeddings.safetensors`, `vocab.json`, `modes.json`,
 `supervised_poles.json`, and `config.json`. No Spring code changes are required.
 
-## Quality gate
+## Testing
 
-Run every local check from the repository root:
+Run the test profiles from the repository root for testing the components:
 
-```powershell
-.\test.cmd
+```bash
+docker compose --profile test run --rm test-model-service
+docker compose --profile test run --rm test-api
+docker compose --profile test run --rm test-frontend
 ```
 
-This runs Ruff and the local Python tests, Spring unit, contract, and architecture
-tests, frontend ESLint and Vitest checks, and the production frontend build.
-Use `.\test.ps1 -Network` to include the Hugging Face compatibility tests.
-GitHub Actions runs the same non-network checks on every push and pull request.
+This mirrors the current non-network quality gate used in CI: Python Ruff and pytest,
+Spring `mvn test`, and the frontend format/lint/test/build checks. Use the
+non-Docker scripts only as a local fallback if you prefer the host environment.
 
 ### Codecov setup
 

@@ -32,5 +32,39 @@ services:
     ports:
       - "5173:80"
 
+  test-model-service:
+    image: python:3.13-slim
+    working_dir: /workspace
+    volumes:
+      - ./services/model-service:/workspace
+    command: >
+      sh -lc "python -m pip install -r requirements.lock &&
+      python -m pip install --no-deps -e . &&
+      python -m ruff check src tests &&
+      python -m ruff format --check src tests &&
+      python -m pytest -m 'not network'"
+    profiles: ["test"]
+
+  test-api:
+    image: maven:3.9-eclipse-temurin-21
+    working_dir: /workspace
+    volumes:
+      - ./services/api:/workspace
+    command: ["bash", "-lc", "./mvnw test"]
+    profiles: ["test"]
+
+  test-frontend:
+    image: node:22-alpine
+    working_dir: /workspace
+    volumes:
+      - ./frontend:/workspace
+    command: >
+      sh -lc "npm ci --no-audit --no-fund &&
+      npm run format:check &&
+      npm run lint &&
+      npm run test:coverage &&
+      npm run build"
+    profiles: ["test"]
+
 volumes:
   huggingface-cache:
