@@ -69,7 +69,7 @@ export function CreativeRecipeForm() {
   const [focus, setFocus] = useState("balanced");
   const [cuisineQuery, setCuisineQuery] = useState("");
   const [pantryOnly, setPantryOnly] = useState(false);
-  const [pantry, setPantry] = useState(["tofu", "ginger", "soy_sauce", "sesame_oil"]);
+  const [pantry, setPantry] = useState([]);
   const directions = useDirections();
   const mutation = useRecipeIdeas();
   const update = (key, value) => setRecipe((current) => ({ ...current, [key]: value }));
@@ -88,7 +88,7 @@ export function CreativeRecipeForm() {
       <div>
         <h2 className="section-title">Give me ideas for this recipe.</h2>
         <p className="section-copy">
-          Add the ingredients you already have. Kitchen Compass will offer a familiar idea, a
+          Add the ingredients you already have. Epicure will offer a familiar idea, a
           balanced idea, and a surprising idea.
         </p>
         <p className="mt-8 border-t border-ink/15 pt-4 font-display text-lg italic leading-7 text-moss">

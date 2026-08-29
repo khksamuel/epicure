@@ -100,7 +100,7 @@ try {
     Wait-ForEndpoint "http://127.0.0.1:5173/" "React frontend"
 
     Write-Host ""
-    Write-Host "Kitchen Compass is ready." -ForegroundColor Green
+    Write-Host "Epicure is ready." -ForegroundColor Green
     Write-Host "Frontend: http://127.0.0.1:5173/"
     Write-Host "Logs:     $logDirectory"
     Write-Host "Press Ctrl+C to stop all services." -ForegroundColor Yellow

@@ -22,7 +22,7 @@ export function AppShell() {
               className="font-display text-2xl font-semibold tracking-[-.02em] text-moss"
               to="/"
             >
-              Kitchen Compass
+              Epicure
             </NavLink>
             <span className="hidden font-display italic text-pencil sm:block">
               A cook's flavour field book
@@ -47,7 +47,7 @@ export function AppShell() {
           <Outlet />
         </main>
         <footer className="mt-16 border-t border-ink/15 py-8 text-sm text-pencil sm:flex sm:items-center sm:justify-between">
-          <span>Kitchen Compass</span>
+          <span>Epicure</span>
           <span className="mt-2 block font-display italic sm:mt-0">
             Ideas for cooks, not rules for cooking.
           </span>

@@ -1,4 +1,4 @@
-# Kitchen Compass React frontend
+# Epicure React frontend
 
 This folder contains the chef-facing React/Vite web application. It is separate
 from the Spring API and uses TanStack React Query for cached model reads and

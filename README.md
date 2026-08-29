@@ -61,7 +61,7 @@ Requirements: Java 21+, Python 3.11+, and Node.js 22.12+. The repository include
 its own pinned Maven Wrapper.
 
 On Windows, double-click `run.cmd`. It starts both services, checks that they are
-ready, and serves the React Kitchen Compass frontend at `http://127.0.0.1:5173/`.
+ready, and serves the React Epicure frontend at `http://127.0.0.1:5173/`.
 Press Ctrl+C in the launcher window to stop all services. Use `run.ps1 -SkipBuild`
 for a faster restart.
 

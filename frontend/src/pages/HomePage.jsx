@@ -46,7 +46,7 @@ export function HomePage() {
             Cook from curiosity, not a script.
           </h1>
           <p className="mt-7 max-w-[51ch] text-base leading-7 text-paper/78 sm:text-lg sm:leading-8">
-            Kitchen Compass helps you find the next good idea — whether you are pairing an
+            Epicure helps you find the next good idea — whether you are pairing an
             ingredient, rebuilding a dish, or following a flavour somewhere new.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -112,7 +112,7 @@ export function HomePage() {
         </div>
         <div className="notePaper px-7 py-10 sm:px-10 sm:py-14">
           <p className="max-w-[51ch] text-lg leading-8 text-ink">
-            The most useful cooking tools leave space for your judgment. Kitchen Compass brings
+            The most useful cooking tools leave space for your judgment. Epicure brings
             possible directions into view, so you can decide what belongs in the dish.
           </p>
           <Link className="action action-primary mt-8" to="/recipe-lab">
