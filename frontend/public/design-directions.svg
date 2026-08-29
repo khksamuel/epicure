@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920" role="img" aria-labelledby="title desc">
-  <title id="title">Kitchen Compass visual design directions</title>
+  <title id="title">Epicure visual design directions</title>
   <desc id="desc">Three visual directions: Canteen Modern, Field Notes, and Night Service.</desc>
   <rect width="1600" height="920" fill="#e8e5dc"/>
   <g font-family="Arial, sans-serif">
-    <text x="70" y="72" font-size="20" font-weight="700" fill="#172522" letter-spacing="3">KITCHEN COMPASS / VISUAL DIRECTIONS</text>
+    <text x="70" y="72" font-size="20" font-weight="700" fill="#172522" letter-spacing="3">EPICURE / VISUAL DIRECTIONS</text>
     <text x="70" y="112" font-size="18" fill="#172522" opacity=".65">Three possible moods for the chef-facing flavour workspace</text>
     <g transform="translate(70 160)">
       <rect width="460" height="680" rx="24" fill="#f6f5ef" stroke="#172522" stroke-opacity=".15"/>

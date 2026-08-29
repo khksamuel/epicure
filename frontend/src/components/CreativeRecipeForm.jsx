@@ -88,8 +88,8 @@ export function CreativeRecipeForm() {
       <div>
         <h2 className="section-title">Give me ideas for this recipe.</h2>
         <p className="section-copy">
-          Add the ingredients you already have. Epicure will offer a familiar idea, a
-          balanced idea, and a surprising idea.
+          Add the ingredients you already have. Epicure will offer a familiar idea, a balanced idea,
+          and a surprising idea.
         </p>
         <p className="mt-8 border-t border-ink/15 pt-4 font-display text-lg italic leading-7 text-moss">
           Treat each suggestion as a note in the margin, not an instruction.
