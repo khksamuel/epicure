@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { Autocomplete } from "./Autocomplete";
 
 function TestAutocomplete() {
@@ -17,9 +17,11 @@ function TestAutocomplete() {
 }
 
 describe("Autocomplete", () => {
+  afterEach(cleanup);
+
   it("reopens with one click while the input remains focused after a selection", () => {
     render(<TestAutocomplete />);
-    const input = screen.getByRole("textbox");
+    const input = screen.getByRole("combobox");
 
     input.focus();
     fireEvent.change(input, { target: { value: "app" } });
@@ -34,5 +36,17 @@ describe("Autocomplete", () => {
 
     expect(input).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("option", { name: "basil" })).toBeVisible();
+  });
+
+  it("selects the highlighted option with the keyboard", () => {
+    render(<TestAutocomplete />);
+    const input = screen.getByRole("combobox");
+
+    input.focus();
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(input).toHaveValue("basil");
+    expect(input).toHaveAttribute("aria-expanded", "false");
   });
 });
