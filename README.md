@@ -35,7 +35,7 @@ The React application is organised into focused routes instead of one long page:
 
 Pantry filtering is currently applied in the frontend to the larger candidate
 set returned by the recipe endpoint. Ingredient swapping uses flavour neighbours
-as creative alternatives; it does not claim physical or culinary equivalence.
+as creative alternatives.
 
 ## Repository layout
 
@@ -160,16 +160,6 @@ docker compose --profile test run --rm test-frontend
 This mirrors the current non-network quality gate used in CI: Python Ruff and pytest,
 Spring `mvn test`, and the frontend format/lint/test/build checks. Use the
 non-Docker scripts only as a local fallback if you prefer the host environment.
-
-### Codecov setup
-
-CI generates JaCoCo coverage for the Spring API and V8 coverage for the React frontend,
-then uploads both reports when `CODECOV_TOKEN` is available. To enable it, install the
-Codecov GitHub App for this repository and add the repository upload token as a GitHub
-Actions secret named `CODECOV_TOKEN`. For a private repository badge, obtain the separate
-badge token from Codecov's **Badges & Graphs** settings and append it as the `token` query
-parameter to the coverage badge URL above. Do not use the repository upload token in the
-README.
 
 ## Documentation
 
