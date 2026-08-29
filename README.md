@@ -57,20 +57,21 @@ epicure-platform/
 
 ## Quick start
 
-Requirements: Java 21+, Python 3.11+, and Node.js 22.12+. The repository includes
-its own pinned Maven Wrapper.
+Docker is the default and recommended way to run the stack. From the repository
+root:
 
-On Windows, double-click `run.cmd`. It starts both services, checks that they are
-ready, and serves the React Epicure frontend at `http://127.0.0.1:5173/`.
-Press Ctrl+C in the launcher window to stop all services. Use `run.ps1 -SkipBuild`
-for a faster restart.
+```bash
+docker compose up --build
+```
 
-For a containerised run, copy `.env.example` to `.env`, optionally pin model
-revisions, then run `docker compose up --build`. The complete application is
-served at `http://127.0.0.1:5173/`; Spring and Python remain on the private
-Compose network.
+The complete application is served at `http://127.0.0.1:5173/`; Spring and the
+Python model service remain on the private Compose network.
 
-Set up and start the internal model service:
+### Manual start without Docker
+
+If Docker is not available on your machine, start the services manually:
+
+1. Set up and start the internal model service:
 
 ```powershell
 cd services\model-service
@@ -79,11 +80,19 @@ python -m venv .venv
 .\.venv\Scripts\python -m uvicorn epicure_backend.app:app --host 127.0.0.1 --port 8000
 ```
 
-In a second terminal, start the public Spring API:
+2. In a second terminal, start the public Spring API:
 
 ```powershell
 cd services\api
 .\mvnw.cmd spring-boot:run
+```
+
+3. In a third terminal, start the React frontend:
+
+```powershell
+cd frontend
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
 The public API is available at `http://127.0.0.1:8080`. Health endpoints:

@@ -5,8 +5,19 @@ from the Spring API and uses TanStack React Query for cached model reads and
 request mutations. Vite proxies `/v1` and `/health` to Spring during local
 development; the production Nginx image provides the same paths.
 
-For local development, the root `run.cmd` starts the Vite development server on
-`http://127.0.0.1:5173/` and the Spring API on `http://127.0.0.1:8080/`.
+For the default local workflow, use Docker from the repository root:
+
+```bash
+docker compose up --build
+```
+
+If Docker is not available, start the frontend manually:
+
+```powershell
+cd frontend
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5173
+```
 
 The application uses same-origin API requests by default. For a separately hosted
 API, set `VITE_API_BASE_URL` at build time. The browser override remains available
@@ -14,7 +25,7 @@ for temporary diagnostics:
 
 ```html
 <script>
-  window.KITCHEN_COMPASS_API = "https://api.example.com";
+  window.EPICURE_API = "https://api.example.com";
 </script>
 ```
 
