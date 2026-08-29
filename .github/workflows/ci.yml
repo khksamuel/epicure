@@ -45,4 +45,15 @@ jobs:
         working-directory: frontend
         run: |
           npm ci
-          npm run check
+          npm run format:check
+          npm run lint
+          npm run test:coverage
+          npm run build
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: services/api/target/site/jacoco/jacoco.xml,frontend/coverage/lcov.info
+          fail_ci_if_error: true

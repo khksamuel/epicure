@@ -150,6 +150,16 @@ tests, frontend ESLint and Vitest checks, and the production frontend build.
 Use `.\test.ps1 -Network` to include the Hugging Face compatibility tests.
 GitHub Actions runs the same non-network checks on every push and pull request.
 
+### Codecov setup
+
+CI generates JaCoCo coverage for the Spring API and V8 coverage for the React frontend,
+then uploads both reports when `CODECOV_TOKEN` is available. To enable it, install the
+Codecov GitHub App for this repository and add the repository upload token as a GitHub
+Actions secret named `CODECOV_TOKEN`. For a private repository badge, obtain the separate
+badge token from Codecov's **Badges & Graphs** settings and append it as the `token` query
+parameter to the coverage badge URL above. Do not use the repository upload token in the
+README.
+
 ## Documentation
 
 - [Architecture](docs/architecture.md)
