@@ -29,6 +29,7 @@ export function ExplorePage() {
         onChange={setDraftIngredient}
         onSubmit={submit}
         message={pairings.isError ? "We could not find that ingredient. Try another name." : ""}
+        isError={pairings.isError}
       />
       <section className="mt-14">
         <h2 className="section-title">What might work with {humanName(ingredient)}?</h2>
@@ -37,10 +38,18 @@ export function ExplorePage() {
         </p>
         <div className="mt-8">
           {pairings.isPending ? (
-            <div className="grid gap-4 md:grid-cols-3">
+            <div
+              className="grid gap-4 md:grid-cols-3"
+              aria-busy="true"
+              aria-label="Loading pairing ideas"
+            >
               {[1, 2, 3].map((item) => (
                 <div className="h-64 animate-pulse rounded-xl bg-paper/80" key={item} />
               ))}
+            </div>
+          ) : pairings.isError ? (
+            <div className="rounded-xl border border-clay/25 bg-paper/70 p-6 text-sm leading-6 text-pencil">
+              Pick an ingredient from the suggestions or check the spelling, then try again.
             </div>
           ) : (
             pairings.data && (

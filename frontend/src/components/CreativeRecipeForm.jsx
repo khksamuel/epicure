@@ -81,6 +81,7 @@ export function CreativeRecipeForm() {
       suggestionsPerStyle: pantryOnly ? 12 : 5,
     });
   const message = mutation.isError ? "We could not explore this recipe." : "";
+  const canSubmit = recipe.ingredients.length > 0 && !mutation.isPending;
 
   return (
     <section className="paper-section mt-16 grid gap-10 p-6 sm:p-9 lg:grid-cols-[.65fr_1.35fr] lg:gap-14">
@@ -207,11 +208,11 @@ export function CreativeRecipeForm() {
         <button
           className="action action-primary mt-6 w-full sm:w-auto"
           onClick={submit}
-          disabled={mutation.isPending}
+          disabled={!canSubmit}
         >
           {mutation.isPending ? "Exploring the dish." : "Suggest my next ingredient"}
         </button>
-        <p className="mt-3 min-h-5 text-sm text-clay" role="status">
+        <p className="mt-3 min-h-5 text-sm text-clay" role={mutation.isError ? "alert" : "status"}>
           {message}
         </p>
         {mutation.data && (

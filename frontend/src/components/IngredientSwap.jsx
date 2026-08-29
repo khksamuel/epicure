@@ -87,15 +87,25 @@ export function IngredientSwap() {
             We could not find alternatives for that ingredient.
           </p>
         )}
+        {mutation.isPending && (
+          <div className="mt-7 grid gap-3 border-t border-ink/15 pt-5" aria-busy="true">
+            <div className="h-7 w-44 animate-pulse rounded bg-linen" />
+            <div className="h-10 animate-pulse rounded-lg bg-linen" />
+          </div>
+        )}
         {mutation.data && (
           <div className="mt-7 border-t border-ink/15 pt-5">
             <h3 className="font-display text-2xl">
               Try in place of {humanName(normaliseIngredient(draftIngredient))}
             </h3>
             <div className="mt-4 flex flex-wrap gap-2">
-              {alternatives.map((item) => (
-                <IngredientChip item={item} key={item.ingredient} />
-              ))}
+              {alternatives.length ? (
+                alternatives.map((item) => <IngredientChip item={item} key={item.ingredient} />)
+              ) : (
+                <p className="text-sm text-pencil">
+                  No new alternatives remain after excluding the ingredients already in the dish.
+                </p>
+              )}
             </div>
           </div>
         )}

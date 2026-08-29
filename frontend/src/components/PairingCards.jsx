@@ -27,9 +27,13 @@ export function PairingCards({ data }) {
           <h3 className="font-display text-3xl leading-tight tracking-[-.02em]">{title}</h3>
           <p className="mt-2 max-w-[30ch] text-sm leading-6 text-pencil">{copy}</p>
           <div className="mt-auto flex flex-wrap gap-2 pt-7">
-            {(data[model] || []).map((item) => (
-              <IngredientChip item={item} key={item.ingredient} />
-            ))}
+            {(data[model] || []).length ? (
+              (data[model] || []).map((item) => (
+                <IngredientChip item={item} key={item.ingredient} />
+              ))
+            ) : (
+              <p className="text-sm text-pencil">No suggestions from this lens yet.</p>
+            )}
           </div>
         </article>
       ))}

@@ -17,6 +17,7 @@ export function Autocomplete({
 }) {
   const [open, setOpen] = useState(false);
   const [filterFromValue, setFilterFromValue] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const rootRef = useRef(null);
   const inputRef = useRef(null);
   const excluded = useMemo(
@@ -44,11 +45,14 @@ export function Autocomplete({
     return () => document.removeEventListener("pointerdown", closeWhenOutside);
   }, []);
 
+  const selectedIndex = Math.min(Math.max(activeIndex, 0), Math.max(matches.length - 1, 0));
+
   const select = (item) => {
     onChange(clearOnSelect ? "" : getOptionLabel(item));
     onSelect?.(item);
     setFilterFromValue(false);
     setOpen(!closeOnSelect);
+    setActiveIndex(0);
     if (!closeOnSelect) requestAnimationFrame(() => inputRef.current?.focus());
   };
 
@@ -63,10 +67,12 @@ export function Autocomplete({
           onChange(event.target.value);
           setFilterFromValue(true);
           setOpen(true);
+          setActiveIndex(0);
         }}
         onFocus={() => {
           setFilterFromValue(false);
           setOpen(true);
+          setActiveIndex(0);
         }}
         onClick={() => {
           if (!open) {
@@ -75,17 +81,40 @@ export function Autocomplete({
           }
         }}
         onKeyDown={(event) => {
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setOpen(true);
+            if (matches.length)
+              setActiveIndex((current) => Math.min(current + 1, matches.length - 1));
+          }
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            setOpen(true);
+            if (matches.length) setActiveIndex((current) => Math.max(current - 1, 0));
+          }
+          if (event.key === "Home" && open && matches.length) {
+            event.preventDefault();
+            setActiveIndex(0);
+          }
+          if (event.key === "End" && open && matches.length) {
+            event.preventDefault();
+            setActiveIndex(matches.length - 1);
+          }
           if (event.key === "Enter") {
             event.preventDefault();
-            if (open && matches[0]) select(matches[0]);
+            if (open && matches[selectedIndex]) select(matches[selectedIndex]);
             else onEnter?.();
           }
           if (event.key === "Escape") setOpen(false);
         }}
         placeholder={placeholder}
         autoComplete="off"
+        role="combobox"
         aria-autocomplete="list"
         aria-controls={`${id}-suggestions`}
+        aria-activedescendant={
+          open && matches[selectedIndex] ? `${id}-option-${selectedIndex}` : undefined
+        }
         aria-expanded={open}
       />
       {open && (
@@ -95,13 +124,17 @@ export function Autocomplete({
           role="listbox"
         >
           {matches.length > 0 ? (
-            matches.map((item) => (
+            matches.map((item, index) => (
               <button
+                id={`${id}-option-${index}`}
                 type="button"
                 role="option"
-                className="block w-full rounded-lg px-3 py-2 text-left text-sm transition hover:bg-leaf/20 focus:bg-leaf/20"
+                aria-selected={selectedIndex === index}
+                tabIndex="-1"
+                className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${selectedIndex === index ? "bg-leaf/20 text-ink" : "hover:bg-leaf/20 focus:bg-leaf/20"}`}
                 key={getOptionValue(item)}
                 onMouseDown={(event) => event.preventDefault()}
+                onMouseMove={() => setActiveIndex(index)}
                 onClick={() => select(item)}
               >
                 {getOptionLabel(item)}

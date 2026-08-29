@@ -96,7 +96,7 @@ export function DirectionExplorer({ ingredient }) {
         >
           {mutation.isPending ? "Exploring." : "Explore this direction"}
         </button>
-        <p className="mt-3 min-h-5 text-sm text-clay" role="status">
+        <p className="mt-3 min-h-5 text-sm text-clay" role={mutation.isError ? "alert" : "status"}>
           {message}
         </p>
         {mutation.data?.length > 0 && (

@@ -201,6 +201,13 @@ function FlavourNoteCard({ query }) {
         Two recipe-pattern neighbours to take as a starting point. Taste, adjust, and make the dish
         your own.
       </p>
+      <button
+        className="mt-5 text-sm font-semibold text-leaf underline decoration-leaf/45 underline-offset-4 transition hover:text-paper"
+        onClick={() => query.refetch()}
+        type="button"
+      >
+        Draw another field note
+      </button>
     </div>
   );
 }
