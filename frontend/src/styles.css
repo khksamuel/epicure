@@ -26,6 +26,22 @@
   body {
     @apply m-0 bg-linen font-sans text-ink antialiased;
   }
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    transform: translateY(-200%);
+    border-radius: 0.5rem;
+    background: #25352f;
+    padding: 0.75rem 1rem;
+    color: #f8f5e9;
+    font-weight: 700;
+    transition: transform 150ms ease;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
   button,
   input,
   select,
