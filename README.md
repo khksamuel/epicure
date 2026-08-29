@@ -1,5 +1,8 @@
 # Epicure platform
 
+[![CI](https://github.com/khksamuel/epicure/actions/workflows/ci.yml/badge.svg)](https://github.com/khksamuel/epicure/actions/workflows/ci.yml)
+[![Test coverage](https://codecov.io/gh/khksamuel/epicure/graph/badge.svg)](https://codecov.io/gh/khksamuel/epicure)
+
 A backend foundation for a cooking application that lets users explore ingredient
 pairings through Epicure's three complementary embedding spaces:
 
@@ -11,6 +14,13 @@ The public backend is Spring Boot. The released Python implementation runs as a
 small internal model service, preserving identical `neighbors`, `slerp`, and
 `closest_mode` behavior while keeping the product backend maintainable and
 independently scalable.
+
+## Research basis
+
+This platform builds on [*Epicure: Navigating the Emergent Geometry of Food Ingredient
+Embeddings*](https://arxiv.org/abs/2605.22391) by Jakub Radzikowski and Josef Chen (2026).
+The paper introduces the Cooc, Core, and Chem embedding spaces used throughout the
+application.
 
 ## Chef workspaces
 
