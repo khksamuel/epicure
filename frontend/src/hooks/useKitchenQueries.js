@@ -1,4 +1,4 @@
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { epicureApi } from "../api/client";
 
 export function useIngredientExploration(ingredient) {
@@ -32,7 +32,28 @@ export function useIngredientOptions() {
     queryKey: ["ingredient-options"],
     queryFn: epicureApi.ingredients,
     staleTime: 60 * 60 * 1000,
-    select: (items) => items.map((item) => item.replaceAll("_", " ")),
+  });
+}
+
+export function useRandomFlavourNote() {
+  const queryClient = useQueryClient();
+  return useQuery({
+    queryKey: ["random-flavour-note"],
+    queryFn: async () => {
+      const ingredients = await queryClient.fetchQuery({
+        queryKey: ["ingredient-options"],
+        queryFn: epicureApi.ingredients,
+        staleTime: 60 * 60 * 1000,
+      });
+      if (!ingredients.length) throw new Error("No ingredients are available.");
+
+      const ingredient = ingredients[Math.floor(Math.random() * ingredients.length)];
+      const pairings = await epicureApi.neighbors(ingredient, 2);
+      if (pairings.length < 2) throw new Error("Not enough pairing ideas are available.");
+
+      return { ingredient, pairings };
+    },
+    staleTime: 5 * 60 * 1000,
   });
 }
 

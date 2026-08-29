@@ -11,7 +11,10 @@ const NAV_ITEMS = [
 
 export function AppShell() {
   return (
-    <main className={`${styles.pageAtmosphere} min-h-[100dvh] text-ink`}>
+    <div className={`${styles.pageAtmosphere} min-h-[100dvh] text-ink`}>
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
         <header className="mb-8 border-b border-ink/15 pb-4">
           <div className="flex items-center justify-between gap-4">
@@ -40,7 +43,9 @@ export function AppShell() {
             ))}
           </nav>
         </header>
-        <Outlet />
+        <main id="main-content" tabIndex="-1">
+          <Outlet />
+        </main>
         <footer className="mt-16 border-t border-ink/15 py-8 text-sm text-pencil sm:flex sm:items-center sm:justify-between">
           <span>Kitchen Compass</span>
           <span className="mt-2 block font-display italic sm:mt-0">
@@ -48,6 +53,6 @@ export function AppShell() {
           </span>
         </footer>
       </div>
-    </main>
+    </div>
   );
 }

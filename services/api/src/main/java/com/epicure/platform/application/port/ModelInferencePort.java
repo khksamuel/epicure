@@ -15,7 +15,7 @@ public interface ModelInferencePort {
 
     List<ModelInfo> models();
 
-    List<String> ingredients(ModelSibling model, String query, int limit);
+    List<String> ingredients(ModelSibling model, String query, Integer limit);
 
     List<ScoredIngredient> neighbors(ModelSibling model, String ingredient, int k, boolean excludeSelf);
 

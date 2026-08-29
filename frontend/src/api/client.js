@@ -13,7 +13,9 @@ async function request(path, options = {}) {
 }
 
 export const epicureApi = {
-  ingredients: () => request("/v1/models/cooc/ingredients?limit=500"),
+  ingredients: () => request("/v1/models/cooc/ingredients"),
+  neighbors: (ingredient, k = 5) =>
+    request(`/v1/models/cooc/neighbors/${encodeURIComponent(ingredient)}?k=${k}`),
   compareNeighbors: (ingredient) =>
     request("/v1/compare/neighbors", {
       method: "POST",

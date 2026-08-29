@@ -42,12 +42,12 @@ public class EpicureModelClient implements ModelInferencePort {
     }
 
     @Override
-    public List<String> ingredients(ModelSibling model, String query, int limit) {
+    public List<String> ingredients(ModelSibling model, String query, Integer limit) {
         return execute(() -> client.get()
                 .uri(builder -> builder
                         .path("/v1/models/{model}/ingredients")
                         .queryParamIfPresent("query", java.util.Optional.ofNullable(query))
-                        .queryParam("limit", limit)
+                        .queryParamIfPresent("limit", java.util.Optional.ofNullable(limit))
                         .build(model.pathValue()))
                 .retrieve()
                 .body(STRING_LIST));
