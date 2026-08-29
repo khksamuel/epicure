@@ -1,7 +1,7 @@
 # Epicure
 
 [![CI](https://github.com/khksamuel/epicure/actions/workflows/ci.yml/badge.svg)](https://github.com/khksamuel/epicure/actions/workflows/ci.yml)
-[![Test coverage](https://codecov.io/gh/khksamuel/epicure/graph/badge.svg)](https://codecov.io/gh/khksamuel/epicure)
+[![codecov](https://codecov.io/gh/khksamuel/epicure/graph/badge.svg?token=ALMHYT0M0B)](https://codecov.io/gh/khksamuel/epicure)
 
 A backend foundation for a cooking application that lets users explore ingredient
 pairings through Epicure's three complementary embedding spaces:
@@ -17,8 +17,8 @@ independently scalable.
 
 ## Research basis
 
-This platform builds on [*Epicure: Navigating the Emergent Geometry of Food Ingredient
-Embeddings*](https://arxiv.org/abs/2605.22391) by Jakub Radzikowski and Josef Chen (2026).
+This platform builds on [_Epicure: Navigating the Emergent Geometry of Food Ingredient
+Embeddings_](https://arxiv.org/abs/2605.22391) by Jakub Radzikowski and Josef Chen (2026).
 The paper introduces the Cooc, Core, and Chem embedding spaces used throughout the
 application.
 
