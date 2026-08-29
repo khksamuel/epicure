@@ -41,7 +41,7 @@ public class ModelController {
     public List<String> ingredients(
             @PathVariable String model,
             @RequestParam(required = false) String query,
-            @RequestParam(defaultValue = "50") @Min(1) @Max(500) int limit
+            @RequestParam(required = false) @Min(1) Integer limit
     ) {
         return models.ingredients(model, query, limit);
     }

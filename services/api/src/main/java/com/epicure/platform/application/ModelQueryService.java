@@ -30,7 +30,7 @@ public class ModelQueryService {
         return inference.models();
     }
 
-    public List<String> ingredients(String model, String query, int limit) {
+    public List<String> ingredients(String model, String query, Integer limit) {
         return inference.ingredients(ModelSibling.fromPath(model), query, limit);
     }
 
