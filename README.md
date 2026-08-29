@@ -1,4 +1,4 @@
-# Epicure platform
+# Epicure
 
 [![CI](https://github.com/khksamuel/epicure/actions/workflows/ci.yml/badge.svg)](https://github.com/khksamuel/epicure/actions/workflows/ci.yml)
 [![Test coverage](https://codecov.io/gh/khksamuel/epicure/graph/badge.svg)](https://codecov.io/gh/khksamuel/epicure)
