@@ -85,14 +85,14 @@ def create_app(registry: ModelRegistry | None = None) -> FastAPI:
     def ingredients(
         model_name: str,
         query: str | None = None,
-        limit: int = Query(default=50, ge=1, le=500),
+        limit: int | None = Query(default=None, ge=1),
     ) -> list[str]:
         model = model_or_404(model_name)
         names = sorted(model.vocab)
         if query:
             needle = query.casefold().replace(" ", "_")
             names = [name for name in names if needle in name.casefold()]
-        return names[:limit]
+        return names if limit is None else names[:limit]
 
     @app.get(
         "/v1/models/{model_name}/neighbors/{ingredient}",
