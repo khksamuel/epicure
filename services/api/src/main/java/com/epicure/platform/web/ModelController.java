@@ -9,6 +9,7 @@ import com.epicure.platform.web.dto.SlerpRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,17 +40,17 @@ public class ModelController {
 
     @GetMapping("/{model}/ingredients")
     public List<String> ingredients(
-            @PathVariable String model,
-            @RequestParam(required = false) String query,
-            @RequestParam(required = false) @Min(1) Integer limit
+            @PathVariable @Size(max = 32) String model,
+            @RequestParam(required = false) @Size(max = 200) String query,
+            @RequestParam(required = false) @Min(1) @Max(100_000) Integer limit
     ) {
         return models.ingredients(model, query, limit);
     }
 
     @GetMapping("/{model}/neighbors/{ingredient}")
     public List<ScoredIngredient> neighbors(
-            @PathVariable String model,
-            @PathVariable String ingredient,
+            @PathVariable @Size(max = 32) String model,
+            @PathVariable @Size(max = 200) String ingredient,
             @RequestParam(defaultValue = "5") @Min(1) @Max(100) int k,
             @RequestParam(name = "exclude_self", defaultValue = "true") boolean excludeSelf
     ) {
@@ -58,7 +59,7 @@ public class ModelController {
 
     @PostMapping("/{model}/slerp")
     public List<ScoredIngredient> slerp(
-            @PathVariable String model,
+            @PathVariable @Size(max = 32) String model,
             @Valid @RequestBody SlerpRequest body
     ) {
         return models.slerp(model, new ModelQueryService.SlerpCommand(
@@ -68,9 +69,9 @@ public class ModelController {
 
     @GetMapping("/{model}/modes/closest/{ingredient}")
     public List<ModeMatch> closestModes(
-            @PathVariable String model,
-            @PathVariable String ingredient,
-            @RequestParam(required = false) String kind,
+            @PathVariable @Size(max = 32) String model,
+            @PathVariable @Size(max = 200) String ingredient,
+            @RequestParam(required = false) @Size(max = 100) String kind,
             @RequestParam(defaultValue = "3") @Min(1) @Max(100) int k
     ) {
         return models.closestModes(model, ingredient, kind, k);
@@ -78,16 +79,16 @@ public class ModelController {
 
     @GetMapping("/{model}/modes")
     public List<ModeSummary> modes(
-            @PathVariable String model,
-            @RequestParam(required = false) String kind
+            @PathVariable @Size(max = 32) String model,
+            @RequestParam(required = false) @Size(max = 100) String kind
     ) {
         return models.modes(model, kind);
     }
 
     @GetMapping("/{model}/mode-members")
     public List<String> modeMembers(
-            @PathVariable String model,
-            @RequestParam(name = "mode_id") String modeId,
+            @PathVariable @Size(max = 32) String model,
+            @RequestParam(name = "mode_id") @Size(max = 200) String modeId,
             @RequestParam(required = false) @Min(1) @Max(500) Integer k
     ) {
         return models.modeMembers(model, modeId, k);
@@ -95,8 +96,8 @@ public class ModelController {
 
     @GetMapping("/{model}/poles")
     public List<String> poles(
-            @PathVariable String model,
-            @RequestParam(required = false) String prefix
+            @PathVariable @Size(max = 32) String model,
+            @RequestParam(required = false) @Size(max = 200) String prefix
     ) {
         return models.poles(model, prefix);
     }

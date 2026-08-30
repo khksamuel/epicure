@@ -3,14 +3,14 @@ package com.epicure.platform.web.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
 public record CompareNeighborsRequest(
-        @NotBlank String ingredient,
+        @NotBlank @Size(max = 200) String ingredient,
         @Min(1) @Max(100) int k,
-        @NotEmpty List<String> models
+        @Size(min = 1, max = 3) List<@NotBlank @Size(max = 32) String> models
 ) {
     public CompareNeighborsRequest {
         if (k == 0) {
@@ -21,4 +21,3 @@ public record CompareNeighborsRequest(
         }
     }
 }
-

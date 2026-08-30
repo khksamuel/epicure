@@ -12,6 +12,8 @@ from .schemas import (
     SlerpRequest,
 )
 
+MAX_INGREDIENT_RESULTS = 100_000
+
 
 def _scored(items: list[tuple[str, float]]) -> list[ScoredIngredient]:
     return [ScoredIngredient(ingredient=name, score=score) for name, score in items]
@@ -84,14 +86,19 @@ def create_app(registry: ModelRegistry | None = None) -> FastAPI:
     @app.get("/v1/models/{model_name}/ingredients")
     def ingredients(
         model_name: str,
-        query: str | None = None,
-        limit: int | None = Query(default=None, ge=1),
+        query: str | None = Query(default=None, max_length=200),
+        limit: int | None = Query(default=None, ge=1, le=MAX_INGREDIENT_RESULTS),
     ) -> list[str]:
         model = model_or_404(model_name)
         names = sorted(model.vocab)
         if query:
             needle = query.casefold().replace(" ", "_")
             names = [name for name in names if needle in name.casefold()]
+        if limit is None and len(names) > MAX_INGREDIENT_RESULTS:
+            raise HTTPException(
+                status_code=422,
+                detail="Too many ingredients matched; refine the query.",
+            )
         return names if limit is None else names[:limit]
 
     @app.get(

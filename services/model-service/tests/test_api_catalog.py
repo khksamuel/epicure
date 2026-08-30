@@ -5,6 +5,17 @@ from fastapi.testclient import TestClient
 from epicure_backend.app import create_app
 
 
+def test_ingredient_catalog_is_not_truncated_at_500(sample_registry):
+    model = sample_registry.get("cooc")
+    model.vocab.update({f"ingredient_{index:04d}": index + 4 for index in range(501)})
+
+    with TestClient(create_app(sample_registry)) as client:
+        response = client.get("/v1/models/cooc/ingredients")
+
+    assert response.status_code == 200
+    assert len(response.json()) == 505
+
+
 def test_catalog_endpoints_and_loaded_model_metadata(sample_registry):
     with TestClient(create_app(sample_registry)) as client:
         assert client.get("/v1/models").json()[0]["loaded"] is False
@@ -48,3 +59,18 @@ def test_compare_slerp_deduplicates_models_and_validates_query_values(sample_reg
 
         invalid = client.get("/v1/models/cooc/ingredients?limit=0")
         assert invalid.status_code == 422
+
+        excessive = client.get("/v1/models/cooc/ingredients?limit=100001")
+        assert excessive.status_code == 422
+
+        too_many_models = client.post(
+            "/v1/compare/neighbors",
+            json={"ingredient": "apple", "models": ["cooc", "core", "chem", "cooc"]},
+        )
+        assert too_many_models.status_code == 422
+
+        excessive_seed = client.post(
+            "/v1/models/cooc/slerp",
+            json={"seed": "a" * 201, "direction": "taste:savoury", "theta_deg": 20},
+        )
+        assert excessive_seed.status_code == 422

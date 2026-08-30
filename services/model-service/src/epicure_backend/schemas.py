@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from typing import Annotated
+
 from pydantic import BaseModel, Field, field_validator
+
+BoundedIngredient = Annotated[str, Field(min_length=1, max_length=200)]
+ModelName = Annotated[str, Field(min_length=1, max_length=32)]
 
 
 class ScoredIngredient(BaseModel):
@@ -15,17 +20,21 @@ class ModeMatch(BaseModel):
 
 
 class SlerpRequest(BaseModel):
-    seed: str
-    direction: str
+    seed: BoundedIngredient
+    direction: BoundedIngredient
     theta_deg: float = Field(ge=-180, le=180)
     k: int = Field(default=5, ge=1, le=100)
     exclude_seed: bool = True
 
 
 class CompareNeighborsRequest(BaseModel):
-    ingredient: str
+    ingredient: BoundedIngredient
     k: int = Field(default=5, ge=1, le=100)
-    models: list[str] = Field(default_factory=lambda: ["cooc", "core", "chem"])
+    models: list[ModelName] = Field(
+        default_factory=lambda: ["cooc", "core", "chem"],
+        min_length=1,
+        max_length=3,
+    )
 
     @field_validator("models")
     @classmethod
@@ -34,7 +43,11 @@ class CompareNeighborsRequest(BaseModel):
 
 
 class CompareSlerpRequest(SlerpRequest):
-    models: list[str] = Field(default_factory=lambda: ["cooc", "core", "chem"])
+    models: list[ModelName] = Field(
+        default_factory=lambda: ["cooc", "core", "chem"],
+        min_length=1,
+        max_length=3,
+    )
 
     @field_validator("models")
     @classmethod
