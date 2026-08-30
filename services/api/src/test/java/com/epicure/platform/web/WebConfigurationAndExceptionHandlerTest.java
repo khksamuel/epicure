@@ -28,9 +28,13 @@ class WebConfigurationAndExceptionHandlerTest {
 
         assertThat(handler.unknownModel(new UnknownModelException("unknown")).getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(handler.modelService(new ModelServiceException(
+        var downstream = handler.modelService(new ModelServiceException(
                 HttpStatus.BAD_GATEWAY, "backend failed", null
-        )).getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
+        ));
+        assertThat(downstream.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
+        assertThat(downstream.getBody())
+                .containsEntry("detail", "The model service could not complete the request.")
+                .doesNotContainValue("backend failed");
         assertThat(handler.validation(new IllegalArgumentException("invalid input")).getStatusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST);
     }

@@ -104,7 +104,7 @@ class EpicureModelClientTest {
 
         assertThatThrownBy(() -> client.models())
                 .isInstanceOf(ModelServiceException.class)
-                .hasMessage("backend unavailable");
+                .hasMessage("The model service could not complete the request.");
         server.verify();
     }
 }

@@ -15,6 +15,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    private static final String MODEL_SERVICE_ERROR =
+            "The model service could not complete the request.";
+
     @ExceptionHandler(UnknownModelException.class)
     ResponseEntity<Map<String, Object>> unknownModel(UnknownModelException exception) {
         return error(HttpStatus.NOT_FOUND, exception.getMessage());
@@ -24,7 +27,7 @@ public class ApiExceptionHandler {
     ResponseEntity<Map<String, Object>> modelService(ModelServiceException exception) {
         return ResponseEntity.status(exception.status()).body(payload(
                 exception.status().value(),
-                exception.getMessage()
+                MODEL_SERVICE_ERROR
         ));
     }
 
@@ -45,4 +48,3 @@ public class ApiExceptionHandler {
         );
     }
 }
-

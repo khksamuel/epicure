@@ -9,6 +9,8 @@ import com.epicure.platform.domain.model.ModelInfo;
 import com.epicure.platform.domain.model.ModelSibling;
 import com.epicure.platform.domain.model.ScoredIngredient;
 import org.springframework.core.ParameterizedTypeReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.ResourceAccessException;
@@ -18,6 +20,10 @@ import java.util.List;
 
 @Component
 public class EpicureModelClient implements ModelInferencePort {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EpicureModelClient.class);
+    private static final String DOWNSTREAM_ERROR =
+            "The model service could not complete the request.";
 
     private static final ParameterizedTypeReference<List<ModelInfo>> MODEL_LIST = new ParameterizedTypeReference<>() {};
     private static final ParameterizedTypeReference<List<ModeSummary>> MODE_SUMMARY_LIST = new ParameterizedTypeReference<>() {};
@@ -143,9 +149,14 @@ public class EpicureModelClient implements ModelInferencePort {
             }
             return response;
         } catch (RestClientResponseException exception) {
+            LOGGER.warn(
+                    "Model service request failed with HTTP status {}",
+                    exception.getStatusCode().value(),
+                    exception
+            );
             throw new ModelServiceException(
                     exception.getStatusCode(),
-                    exception.getResponseBodyAsString(),
+                    DOWNSTREAM_ERROR,
                     exception
             );
         } catch (ResourceAccessException exception) {

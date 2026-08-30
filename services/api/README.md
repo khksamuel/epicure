@@ -27,8 +27,8 @@ model-service address with `EPICURE_MODEL_SERVICE_BASE_URL`.
 Connection and response limits are configurable with
 `EPICURE_MODEL_SERVICE_CONNECT_TIMEOUT` and `EPICURE_MODEL_SERVICE_READ_TIMEOUT`.
 
-Actuator endpoints are exposed under `/actuator`. The public application listens on
-port 8080 by default.
+Only the Actuator health endpoint is exposed under `/actuator/health`, without
+component details. The public application listens on port 8080 by default.
 
 The chef workflow is available at `POST /v1/creative/recipe-ideas`. It accepts a
 recipe title and ingredient list, then returns familiar, balanced, and surprising
