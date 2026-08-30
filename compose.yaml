@@ -4,7 +4,7 @@ services:
       context: services/model-service
     restart: unless-stopped
     volumes:
-      - huggingface-cache:/root/.cache/huggingface
+      - huggingface-cache:/home/epicure/.cache/huggingface
     environment:
       EPICURE_MODEL_COOC: ${EPICURE_MODEL_COOC:-Kaikaku/epicure-cooc}
       EPICURE_MODEL_CORE: ${EPICURE_MODEL_CORE:-Kaikaku/epicure-core}
@@ -19,7 +19,8 @@ services:
       context: services/api
     restart: unless-stopped
     depends_on:
-      - model-service
+      model-service:
+        condition: service_healthy
     environment:
       EPICURE_MODEL_SERVICE_BASE_URL: http://model-service:8000
 
@@ -28,9 +29,10 @@ services:
       context: frontend
     restart: unless-stopped
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     ports:
-      - "5173:80"
+      - "5173:8080"
 
   test-model-service:
     image: python:3.13-slim
