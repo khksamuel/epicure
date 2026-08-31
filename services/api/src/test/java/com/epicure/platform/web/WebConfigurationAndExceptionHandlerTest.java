@@ -35,7 +35,10 @@ class WebConfigurationAndExceptionHandlerTest {
         assertThat(downstream.getBody())
                 .containsEntry("detail", "The model service could not complete the request.")
                 .doesNotContainValue("backend failed");
-        assertThat(handler.validation(new IllegalArgumentException("invalid input")).getStatusCode())
-                .isEqualTo(HttpStatus.BAD_REQUEST);
+        var validation = handler.validation(new IllegalArgumentException("internal validation detail"));
+        assertThat(validation.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(validation.getBody())
+                .containsEntry("detail", "Request validation failed.")
+                .doesNotContainValue("internal validation detail");
     }
 }

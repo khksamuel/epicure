@@ -5,9 +5,12 @@ import com.epicure.platform.infrastructure.model.ModelServiceException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.Map;
@@ -17,6 +20,7 @@ public class ApiExceptionHandler {
 
     private static final String MODEL_SERVICE_ERROR =
             "The model service could not complete the request.";
+    private static final String VALIDATION_ERROR = "Request validation failed.";
 
     @ExceptionHandler(UnknownModelException.class)
     ResponseEntity<Map<String, Object>> unknownModel(UnknownModelException exception) {
@@ -31,9 +35,15 @@ public class ApiExceptionHandler {
         ));
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class})
-    ResponseEntity<Map<String, Object>> validation(Exception exception) {
-        return error(HttpStatus.BAD_REQUEST, exception.getMessage());
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            HandlerMethodValidationException.class,
+            ConstraintViolationException.class,
+            HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class
+    })
+    ResponseEntity<Map<String, Object>> validation(Exception ignored) {
+        return error(HttpStatus.BAD_REQUEST, VALIDATION_ERROR);
     }
 
     private ResponseEntity<Map<String, Object>> error(HttpStatus status, String message) {
