@@ -1,0 +1,42 @@
+name: Deploy backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "services/**"
+      - "compose.yaml"
+      - "compose.production.yaml"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy backend files to OCI
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          source: "compose.yaml,compose.production.yaml,services/api,services/model-service"
+          target: "/opt/epicure"
+
+      - name: Rebuild and restart backend on OCI
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          script: |
+            set -eu
+            cd /opt/epicure
+            docker compose -f compose.yaml -f compose.production.yaml up -d --build model-service api
+            docker image prune -f

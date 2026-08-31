@@ -1,0 +1,6 @@
+services:
+  api:
+    # Keep the API private to the VM. Caddy/Nginx terminates TLS and proxies
+    # requests to this loopback address.
+    ports:
+      - "127.0.0.1:8080:8080"
