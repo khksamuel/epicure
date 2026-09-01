@@ -131,11 +131,7 @@ describe("Autocomplete", () => {
       return 1;
     });
     render(
-      <StatefulAutocomplete
-        options={["apple", "basil"]}
-        closeOnSelect={false}
-        clearOnSelect
-      />,
+      <StatefulAutocomplete options={["apple", "basil"]} closeOnSelect={false} clearOnSelect />,
     );
     const input = screen.getByRole("combobox");
 
@@ -152,12 +148,12 @@ describe("Autocomplete", () => {
 
   it("can execute the outside-click handler after its root has been released", () => {
     const listener = vi.fn();
-    const addEventListener = vi.spyOn(document, "addEventListener").mockImplementation(
-      (type, callback, options) => {
+    const addEventListener = vi
+      .spyOn(document, "addEventListener")
+      .mockImplementation((type, callback, options) => {
         if (type === "pointerdown") listener.mockImplementation(callback);
         return EventTarget.prototype.addEventListener.call(document, type, callback, options);
-      },
-    );
+      });
     const { unmount } = render(
       <Autocomplete id="released" value="" onChange={vi.fn()} options={["apple"]} />,
     );
