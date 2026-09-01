@@ -59,7 +59,7 @@ function CreativeCards({ data, focus, pantryOnly, pantry }) {
   );
 }
 
-export function CreativeRecipeForm() {
+export function CreativeRecipeForm({ standalone: _standalone = false }: { standalone?: boolean }) {
   const [recipe, setRecipe] = useState({
     title: "My next dish",
     ingredients: ["mushroom", "rice", "garlic"],

@@ -127,7 +127,7 @@ describe("Autocomplete", () => {
 
   it("supports optional callbacks and selections that remain open and clear the input", () => {
     const frame = vi.spyOn(globalThis, "requestAnimationFrame").mockImplementation((callback) => {
-      callback();
+      callback(0);
       return 1;
     });
     render(
@@ -151,7 +151,8 @@ describe("Autocomplete", () => {
     const addEventListener = vi
       .spyOn(document, "addEventListener")
       .mockImplementation((type, callback, options) => {
-        if (type === "pointerdown") listener.mockImplementation(callback);
+        if (type === "pointerdown")
+          listener.mockImplementation(callback as (...args: any[]) => any);
         return EventTarget.prototype.addEventListener.call(document, type, callback, options);
       });
     const { unmount } = render(

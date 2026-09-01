@@ -3,7 +3,7 @@ const API_BASE = (import.meta.env.VITE_API_BASE_URL || window.KITCHEN_COMPASS_AP
   "",
 );
 
-async function request(path, options = {}) {
+async function request(path: string, options: RequestInit = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
     headers: { "Content-Type": "application/json", ...(options.headers || {}) },
     ...options,

@@ -13,7 +13,7 @@ const LENSES = [
 export function IngredientCompare() {
   const [draftLeft, setDraftLeft] = useState("miso");
   const [draftRight, setDraftRight] = useState("soy sauce");
-  const [ingredients, setIngredients] = useState(["miso", "soy_sauce"]);
+  const [ingredients, setIngredients] = useState<[string, string]>(["miso", "soy_sauce"]);
   const [lens, setLens] = useState("core");
   const comparison = useIngredientComparison(...ingredients);
 

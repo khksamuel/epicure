@@ -10,7 +10,7 @@ const MODEL_OPTIONS = [
   { value: "chem", label: "Flavour surprises" },
 ];
 
-export function DirectionExplorer({ ingredient }) {
+export function DirectionExplorer({ ingredient, standalone: _standalone = false }) {
   const directions = useDirections();
   const mutation = useSlerp();
   const [direction, setDirection] = useState("cuisine:South_Asian");
@@ -81,8 +81,8 @@ export function DirectionExplorer({ ingredient }) {
             value={angle}
             className="mt-4 w-full accent-moss"
             step="5"
-            onInput={(event) => setAngle(event.target.value)}
-            onChange={(event) => setAngle(event.target.value)}
+            onInput={(event) => setAngle(Number(event.currentTarget.value))}
+            onChange={(event) => setAngle(Number(event.currentTarget.value))}
           />
           <output className="mt-3 block text-sm font-semibold text-moss">
             {angle < 25 ? "A gentle nudge" : angle < 55 ? "A creative step" : "A bold leap"} ·{" "}

@@ -8,7 +8,7 @@ describe("epicureApi", () => {
     const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       json: async () => [],
-    });
+    } as Response);
 
     await epicureApi.slerp({
       model: "core",
@@ -36,7 +36,7 @@ describe("epicureApi", () => {
     const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       json: async () => ["miso", "rice"],
-    });
+    } as Response);
 
     await expect(epicureApi.ingredients()).resolves.toEqual(["miso", "rice"]);
     expect(fetch).toHaveBeenCalledWith("/v1/models/cooc/ingredients", expect.anything());
@@ -46,7 +46,7 @@ describe("epicureApi", () => {
     const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       json: async () => [],
-    });
+    } as Response);
 
     await Promise.all([
       epicureApi.neighbors("salt & pepper", 3),
@@ -79,7 +79,7 @@ describe("epicureApi", () => {
   });
 
   it("surfaces failed API responses", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: false, status: 503 });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: false, status: 503 } as Response);
 
     await expect(epicureApi.directions()).rejects.toThrow("Request failed with status 503");
   });

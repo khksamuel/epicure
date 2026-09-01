@@ -43,7 +43,7 @@ export function AppShell() {
             ))}
           </nav>
         </header>
-        <main id="main-content" tabIndex="-1">
+        <main id="main-content" tabIndex={-1}>
           <Outlet />
         </main>
         <footer className="mt-16 border-t border-ink/15 py-8 text-sm text-pencil sm:flex sm:items-center sm:justify-between">

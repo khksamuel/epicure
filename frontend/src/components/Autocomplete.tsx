@@ -1,5 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+type AutocompleteProps = {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: any[];
+  onSelect?: (item: any) => void;
+  onEnter?: () => void;
+  exclude?: any[];
+  getOptionLabel?: (item: any) => string;
+  getOptionValue?: (item: any) => string;
+  placeholder?: string;
+  className?: string;
+  closeOnSelect?: boolean;
+  clearOnSelect?: boolean;
+};
+
 export function Autocomplete({
   id,
   value,
@@ -14,12 +30,12 @@ export function Autocomplete({
   className = "",
   closeOnSelect = true,
   clearOnSelect = false,
-}) {
+}: AutocompleteProps) {
   const [open, setOpen] = useState(false);
   const [filterFromValue, setFilterFromValue] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const rootRef = useRef(null);
-  const inputRef = useRef(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const excluded = useMemo(
     () => new Set(exclude.map((item) => String(item).toLowerCase())),
     [exclude],
@@ -130,7 +146,7 @@ export function Autocomplete({
                 type="button"
                 role="option"
                 aria-selected={selectedIndex === index}
-                tabIndex="-1"
+                tabIndex={-1}
                 className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${selectedIndex === index ? "bg-leaf/20 text-ink" : "hover:bg-leaf/20 focus:bg-leaf/20"}`}
                 key={getOptionValue(item)}
                 onMouseDown={(event) => event.preventDefault()}
