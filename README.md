@@ -3,17 +3,13 @@
 [![CI](https://github.com/khksamuel/epicure/actions/workflows/ci.yml/badge.svg)](https://github.com/khksamuel/epicure/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/khksamuel/epicure/graph/badge.svg?token=ALMHYT0M0B)](https://codecov.io/gh/khksamuel/epicure)
 
-A backend foundation for a cooking application that lets users explore ingredient
-pairings through Epicure's three complementary embedding spaces:
+Epicure is a full-stack cooking exploration platform. Its chef-facing React application, Spring Boot API, and internal Python model service help cooks explore ingredient pairings, develop recipe ideas, find swaps, and steer flavour through Epicure's three complementary embedding spaces:
 
 - **Cooc** — pairings learned from recipe co-occurrence
 - **Core** — a blend of recipe context and flavour chemistry
 - **Chem** — pairings driven by shared flavour compounds
 
-The public backend is Spring Boot. The released Python implementation runs as a
-small internal model service, preserving identical `neighbors`, `slerp`, and
-`closest_mode` behavior while keeping the product backend maintainable and
-independently scalable.
+The public API is Spring Boot, while the released Python implementation runs as a small internal model service. Together they preserve identical `neighbors`, `slerp`, and `closest_mode` behaviour while keeping the product maintainable and independently scalable.
 
 ## Research basis
 
