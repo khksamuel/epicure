@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi.testclient import TestClient
 
 from epicure_backend.app import create_app
+from epicure_backend.schemas import CompareNeighborsRequest
 
 
 def test_ingredient_catalog_is_not_truncated_at_500(sample_registry):
@@ -74,3 +75,27 @@ def test_compare_slerp_deduplicates_models_and_validates_query_values(sample_reg
             json={"seed": "a" * 201, "direction": "taste:savoury", "theta_deg": 20},
         )
         assert excessive_seed.status_code == 422
+
+
+def test_catalog_reports_loading_errors_and_unbounded_result_sets(sample_registry):
+    model = sample_registry.get("cooc")
+    model.vocab.update({f"ingredient_{index:06d}": index + 4 for index in range(100_001)})
+
+    with TestClient(create_app(sample_registry)) as client:
+        assert client.get("/v1/models/cooc/ingredients").status_code == 422
+
+    class BrokenRegistry:
+        sources = sample_registry.sources
+
+        def get(self, _name):
+            raise RuntimeError("offline")
+
+        def is_loaded(self, _name):
+            return False
+
+    with TestClient(create_app(BrokenRegistry())) as client:
+        response = client.get("/v1/models/cooc/ingredients")
+    assert response.status_code == 503
+    assert "offline" in response.json()["detail"]
+
+    assert CompareNeighborsRequest(ingredient="apple", models=["cooc", "cooc"]).models == ["cooc"]

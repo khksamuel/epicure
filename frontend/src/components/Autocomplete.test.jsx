@@ -30,6 +30,11 @@ function FreeformAutocomplete({ onEnter }) {
   );
 }
 
+function StatefulAutocomplete(props) {
+  const [value, setValue] = useState("");
+  return <Autocomplete id="stateful" value={value} onChange={setValue} {...props} />;
+}
+
 describe("Autocomplete", () => {
   afterEach(cleanup);
 
@@ -102,5 +107,63 @@ describe("Autocomplete", () => {
     expect(screen.getByRole("option", { name: "basil" })).toBeVisible();
     fireEvent.pointerDown(document.body);
     expect(input).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("handles upward navigation, empty-list arrows, and pointer highlighting", () => {
+    render(<FreeformAutocomplete onEnter={vi.fn()} />);
+    const input = screen.getByRole("combobox");
+
+    input.focus();
+    fireEvent.keyDown(input, { key: "ArrowUp" });
+    expect(input).toHaveAttribute("aria-activedescendant", "keyboard-option-0");
+    fireEvent.mouseMove(screen.getByRole("option", { name: "miso" }));
+    expect(input).toHaveAttribute("aria-activedescendant", "keyboard-option-2");
+
+    fireEvent.change(input, { target: { value: "none" } });
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.keyDown(input, { key: "ArrowUp" });
+    expect(screen.getByText("No matching option.")).toBeVisible();
+  });
+
+  it("supports optional callbacks and selections that remain open and clear the input", () => {
+    const frame = vi.spyOn(globalThis, "requestAnimationFrame").mockImplementation((callback) => {
+      callback();
+      return 1;
+    });
+    render(
+      <StatefulAutocomplete
+        options={["apple", "basil"]}
+        closeOnSelect={false}
+        clearOnSelect
+      />,
+    );
+    const input = screen.getByRole("combobox");
+
+    input.focus();
+    fireEvent.click(input);
+    fireEvent.click(input);
+    fireEvent.click(screen.getByRole("option", { name: "apple" }));
+
+    expect(input).toHaveValue("");
+    expect(input).toHaveFocus();
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    frame.mockRestore();
+  });
+
+  it("can execute the outside-click handler after its root has been released", () => {
+    const listener = vi.fn();
+    const addEventListener = vi.spyOn(document, "addEventListener").mockImplementation(
+      (type, callback, options) => {
+        if (type === "pointerdown") listener.mockImplementation(callback);
+        return EventTarget.prototype.addEventListener.call(document, type, callback, options);
+      },
+    );
+    const { unmount } = render(
+      <Autocomplete id="released" value="" onChange={vi.fn()} options={["apple"]} />,
+    );
+
+    unmount();
+    listener({ target: document.body });
+    addEventListener.mockRestore();
   });
 });

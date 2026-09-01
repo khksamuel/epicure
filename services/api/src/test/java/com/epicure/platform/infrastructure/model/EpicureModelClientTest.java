@@ -7,9 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.ResourceAccessException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
@@ -106,5 +109,23 @@ class EpicureModelClientTest {
                 .isInstanceOf(ModelServiceException.class)
                 .hasMessage("The model service could not complete the request.");
         server.verify();
+    }
+
+    @Test
+    void rejectsEmptyResponsesAndUnavailableModelServices() {
+        server.expect(requestTo("http://model-service/health"))
+                .andRespond(withSuccess("", MediaType.APPLICATION_JSON));
+
+        assertThatThrownBy(() -> client.health())
+                .isInstanceOf(ModelServiceException.class)
+                .hasMessage("The model service returned an empty response.");
+        server.verify();
+
+        RestClient unavailable = mock(RestClient.class);
+        when(unavailable.get()).thenThrow(new ResourceAccessException("offline"));
+
+        assertThatThrownBy(() -> new EpicureModelClient(unavailable).health())
+                .isInstanceOf(ModelServiceException.class)
+                .hasMessage("Could not reach the model service within the configured timeout.");
     }
 }

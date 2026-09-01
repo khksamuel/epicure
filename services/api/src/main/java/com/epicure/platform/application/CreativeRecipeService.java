@@ -83,7 +83,10 @@ public class CreativeRecipeService {
     }
 
     private boolean isExcluded(String ingredient, String dietaryNotes) {
-        if (dietaryNotes == null || dietaryNotes.isBlank()) {
+        if (dietaryNotes == null) {
+            return false;
+        }
+        if (dietaryNotes.isBlank()) {
             return false;
         }
         String notes = dietaryNotes.toLowerCase(Locale.ROOT);

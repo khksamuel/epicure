@@ -15,6 +15,9 @@ class ModelServiceConfigurationTest {
         assertThat(defaults.connectTimeout()).isEqualTo(Duration.ofSeconds(3));
         assertThat(defaults.readTimeout()).isEqualTo(Duration.ofSeconds(30));
 
+        assertThat(new ModelServiceProperties("", Duration.ofSeconds(1), Duration.ofSeconds(2)).baseUrl())
+                .isEqualTo("http://127.0.0.1:8000");
+
         ModelServiceProperties configured = new ModelServiceProperties(
                 "http://model-service", Duration.ofSeconds(1), Duration.ofSeconds(2)
         );

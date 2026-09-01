@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import builtins
+
 import numpy as np
 import pytest
 
 from epicure import Epicure, ModeEntry
-from epicure.model import _unit
+from epicure.model import _load_safetensors, _try_hf_download, _unit
 
 
 def test_public_interface(sample_model_dir):
@@ -29,6 +31,7 @@ def test_slerp_rotates_toward_direction(sample_model_dir):
 
     assert at_zero[0][0] == "pear"
     assert at_ninety[0][0] == "onion"
+    assert model.slerp("apple", "taste:savoury", theta_deg=90, k=1, exclude_seed=False)
 
 
 def test_model_handles_parallel_directions_and_catalog_edge_cases(sample_model_dir):
@@ -45,8 +48,14 @@ def test_model_handles_parallel_directions_and_catalog_edge_cases(sample_model_d
 
 
 def test_model_rejects_invalid_embedding_and_pole_shapes():
+    with pytest.raises(ValueError, match="2-D matrix"):
+        Epicure(np.ones(2), {"apple": 0, "pear": 1}, [], {}, {})
+
     with pytest.raises(ValueError, match="row count"):
         Epicure(np.ones((1, 2)), {"apple": 0, "pear": 1}, [], {}, {})
+
+    with pytest.raises(ValueError, match="unique and contiguous"):
+        Epicure(np.ones((2, 2)), {"apple": 0, "pear": 2}, [], {}, {})
 
     mode = ModeEntry("mode", "factor", "factor", "Mode", 1, ["apple"], np.ones(3))
     with pytest.raises(ValueError, match="mode poles"):
@@ -54,3 +63,36 @@ def test_model_rejects_invalid_embedding_and_pole_shapes():
 
     with pytest.raises(ValueError, match="supervised poles"):
         Epicure(np.ones((1, 2)), {"apple": 0}, [], {"taste:sweet": np.ones(3)}, {})
+
+
+def test_remote_loading_and_invalid_safetensors_are_reported(monkeypatch):
+    downloads = []
+
+    def download(repo_id, filename, revision=None):
+        downloads.append((repo_id, filename, revision))
+        return "missing-artifact"
+
+    monkeypatch.setattr("epicure.model._try_hf_download", download)
+    with pytest.raises(FileNotFoundError):
+        Epicure.from_pretrained("example/model", revision="v1")
+    assert downloads == [("example/model", "embeddings.safetensors", "v1")]
+
+    monkeypatch.setattr("safetensors.numpy.load_file", lambda _: {})
+    with pytest.raises(ValueError, match="embeddings.*tensor"):
+        _load_safetensors("fixture.safetensors")
+
+
+def test_missing_huggingface_dependency_has_an_actionable_error(monkeypatch):
+    monkeypatch.setattr("huggingface_hub.hf_hub_download", lambda **kwargs: kwargs["filename"])
+    assert _try_hf_download("example/model", "config.json", revision="v1") == "config.json"
+
+    original_import = builtins.__import__
+
+    def import_without_huggingface(name, *args, **kwargs):
+        if name == "huggingface_hub":
+            raise ImportError("missing dependency")
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", import_without_huggingface)
+    with pytest.raises(ImportError, match="huggingface_hub is required"):
+        _try_hf_download("example/model", "config.json")

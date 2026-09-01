@@ -38,3 +38,25 @@ def test_configured_sources_read_environment_overrides(monkeypatch):
     assert sources["cooc"].source == "local-cooc"
     assert sources["core"].source == "Kaikaku/epicure-core"
     assert sources["chem"].revision == "abc123"
+
+
+def test_registry_does_not_replace_a_model_loaded_while_waiting_for_the_lock(monkeypatch):
+    source = ModelSource(name="cooc", source="fixture", revision=None)
+    registry = ModelRegistry({"cooc": source})
+    loaded = object()
+
+    class LoadingLock:
+        def __enter__(self):
+            registry._models["cooc"] = loaded
+
+        def __exit__(self, *_args):
+            return False
+
+    registry._locks["cooc"] = LoadingLock()
+    monkeypatch.setattr(
+        Epicure,
+        "from_pretrained",
+        lambda *_args, **_kwargs: pytest.fail("reloaded"),
+    )
+
+    assert registry.get("cooc") is loaded

@@ -62,4 +62,33 @@ class CreativeRecipeServiceTest {
         assertThat(result.balancedIdeas()).isEmpty();
         assertThat(result.surprisingIdeas()).isEmpty();
     }
+
+    @Test
+    void ignoresNullSuggestionsAndNonVegetarianDietaryNotes() {
+        ModelQueryService models = mock(ModelQueryService.class);
+        when(models.neighbors(anyString(), anyString(), eq(10), eq(true)))
+                .thenReturn(List.of(
+                        new ScoredIngredient(null, 0.5),
+                        new ScoredIngredient("basil", 0.4),
+                        new ScoredIngredient("thyme", 0.3)
+                ));
+        CreativeRecipeService service = new CreativeRecipeService(models);
+
+        var result = service.explore(new CreativeRecipeCommand(
+                "Title", List.of("apple"), null, "pescatarian", 3
+        ));
+
+        assertThat(result.familiarIdeas()).extracting(item -> item.ingredient())
+                .containsExactly("basil", "thyme");
+        assertThat(result.dietaryNotes()).isEqualTo("pescatarian");
+
+        var blankNotes = service.explore(new CreativeRecipeCommand(
+                "Title", List.of("apple"), null, " ", 3
+        ));
+        assertThat(blankNotes.dietaryNotes()).isEmpty();
+
+        assertThat(service.explore(new CreativeRecipeCommand(
+                "Title", List.of("apple"), null, null, 3
+        )).dietaryNotes()).isEmpty();
+    }
 }

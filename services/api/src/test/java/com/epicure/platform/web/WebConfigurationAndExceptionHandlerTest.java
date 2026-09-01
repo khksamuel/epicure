@@ -16,6 +16,8 @@ class WebConfigurationAndExceptionHandlerTest {
     void usesSensibleCorsDefaults_andAcceptsConfiguredOrigins() {
         assertThat(new WebProperties(null).allowedOrigins())
                 .containsExactly("http://127.0.0.1:5173", "http://localhost:5173");
+        assertThat(new WebProperties(List.of()).allowedOrigins())
+                .containsExactly("http://127.0.0.1:5173", "http://localhost:5173");
         WebProperties configured = new WebProperties(List.of("https://epicure.example"));
         assertThat(configured.allowedOrigins()).containsExactly("https://epicure.example");
 
