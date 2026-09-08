@@ -56,6 +56,14 @@ steps:
         gcloud run services replace /workspace/cloudrun-service.rendered.yaml \
           --region=europe-west1 \
           --quiet
+        # `services replace` manages the service spec but can leave the
+        # unauthenticated invoker policy unset. Re-apply it so the public
+        # frontend remains reachable after every trigger deployment.
+        gcloud run services add-iam-policy-binding epicure \
+          --region=europe-west1 \
+          --member=allUsers \
+          --role=roles/run.invoker \
+          --quiet
 images:
   - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/frontend:$COMMIT_SHA
   - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/api:$COMMIT_SHA
