@@ -1,0 +1,74 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: epicure
+spec:
+  template:
+    metadata:
+      annotations:
+        # Frontend starts only after the API is healthy; the API, in turn,
+        # waits for the model process to complete its startup probe.
+        run.googleapis.com/container-dependencies: '{"api":["model-service"],"frontend":["api"]}'
+    spec:
+      containerConcurrency: 8
+      timeoutSeconds: 300
+      containers:
+        - name: frontend
+          image: __IMAGE_PREFIX__/frontend:__TAG__
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 3
+        - name: api
+          image: __IMAGE_PREFIX__/api:__TAG__
+          env:
+            - name: SERVER_PORT
+              value: "8081"
+            - name: EPICURE_MODEL_SERVICE_BASE_URL
+              value: http://127.0.0.1:8000
+            - name: JAVA_TOOL_OPTIONS
+              value: -XX:ActiveProcessorCount=1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            failureThreshold: 12
+            periodSeconds: 5
+            timeoutSeconds: 3
+        - name: model-service
+          image: __IMAGE_PREFIX__/model-service:__TAG__
+          env:
+            - name: OMP_NUM_THREADS
+              value: "1"
+            - name: OPENBLAS_NUM_THREADS
+              value: "1"
+            - name: MKL_NUM_THREADS
+              value: "1"
+            - name: NUMEXPR_NUM_THREADS
+              value: "1"
+            - name: MALLOC_ARENA_MAX
+              value: "2"
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            failureThreshold: 30
+            periodSeconds: 10
+            timeoutSeconds: 4

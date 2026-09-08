@@ -1,0 +1,64 @@
+# Builds all Epicure containers and replaces the Cloud Run multi-container
+# service. Configure a Cloud Build trigger for master that uses this file.
+steps:
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        if ! gcloud artifacts repositories describe epicure-cloudrun --location=europe-west1; then
+          gcloud artifacts repositories create epicure-cloudrun \
+            --repository-format=docker \
+            --location=europe-west1 \
+            --description="Epicure Cloud Run images"
+        fi
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/frontend:$COMMIT_SHA
+      - --file
+      - frontend/Dockerfile.cloudrun
+      - frontend
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/api:$COMMIT_SHA
+      - services/api
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/model-service:$COMMIT_SHA
+      - services/model-service
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/frontend:$COMMIT_SHA
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/api:$COMMIT_SHA
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/model-service:$COMMIT_SHA
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        sed \
+          -e "s|__IMAGE_PREFIX__|europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun|g" \
+          -e "s|__TAG__|$COMMIT_SHA|g" \
+          deploy/cloudrun-service.yaml > /workspace/cloudrun-service.rendered.yaml
+        gcloud run services replace /workspace/cloudrun-service.rendered.yaml \
+          --region=europe-west1 \
+          --quiet
+images:
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/frontend:$COMMIT_SHA
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/api:$COMMIT_SHA
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/epicure-cloudrun/model-service:$COMMIT_SHA
+options:
+  logging: CLOUD_LOGGING_ONLY
