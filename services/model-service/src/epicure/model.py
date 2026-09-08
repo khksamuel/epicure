@@ -72,7 +72,9 @@ class Epicure:
         supervised_poles: dict[str, np.ndarray],
         config: dict,
     ):
-        self.E_raw = E.astype(np.float32)
+        # Released checkpoints are float32. Avoid an otherwise full-size duplicate
+        # while retaining the public raw-vector interface.
+        self.E_raw = E.astype(np.float32, copy=False)
         self.E = _unit(self.E_raw)
         self.vocab = vocab
         self.itos = {i: n for n, i in vocab.items()}
