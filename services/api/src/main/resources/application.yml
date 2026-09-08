@@ -5,6 +5,15 @@ spring:
 server:
   port: ${SERVER_PORT:8080}
   shutdown: graceful
+  tomcat:
+    threads:
+      # Spring/Tomcat defaults to 200 worker threads. The API is primarily a
+      # thin proxy to the model service, so a small pool avoids idle thread
+      # stacks on cloud instances and can be raised without rebuilding.
+      max: ${SERVER_TOMCAT_MAX_THREADS:16}
+      min-spare: ${SERVER_TOMCAT_MIN_SPARE_THREADS:1}
+    max-connections: ${SERVER_TOMCAT_MAX_CONNECTIONS:128}
+    accept-count: ${SERVER_TOMCAT_ACCEPT_COUNT:32}
 
 epicure:
   model-service:

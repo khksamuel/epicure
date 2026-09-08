@@ -6,6 +6,13 @@ services:
     volumes:
       - huggingface-cache:/home/epicure/.cache/huggingface
     environment:
+      # The service uses one Uvicorn worker; prevent NumPy/BLAS from creating
+      # extra native worker pools for each vector operation.
+      OMP_NUM_THREADS: ${EPICURE_MODEL_OMP_THREADS:-1}
+      OPENBLAS_NUM_THREADS: ${EPICURE_MODEL_OPENBLAS_THREADS:-1}
+      MKL_NUM_THREADS: ${EPICURE_MODEL_MKL_THREADS:-1}
+      NUMEXPR_NUM_THREADS: ${EPICURE_MODEL_NUMEXPR_THREADS:-1}
+      MALLOC_ARENA_MAX: ${EPICURE_MODEL_MALLOC_ARENAS:-2}
       EPICURE_MODEL_COOC: ${EPICURE_MODEL_COOC:-Kaikaku/epicure-cooc}
       EPICURE_MODEL_CORE: ${EPICURE_MODEL_CORE:-Kaikaku/epicure-core}
       EPICURE_MODEL_CHEM: ${EPICURE_MODEL_CHEM:-Kaikaku/epicure-chem}
@@ -23,6 +30,9 @@ services:
         condition: service_healthy
     environment:
       EPICURE_MODEL_SERVICE_BASE_URL: http://model-service:8000
+      # Keep JVM background pools proportional to a small cloud instance. Set
+      # EPICURE_JAVA_TOOL_OPTIONS to scale the API out on larger instances.
+      JAVA_TOOL_OPTIONS: ${EPICURE_JAVA_TOOL_OPTIONS:--XX:ActiveProcessorCount=1}
 
   frontend:
     build:
