@@ -35,6 +35,11 @@ spec:
               value: "8081"
             - name: EPICURE_MODEL_SERVICE_BASE_URL
               value: http://127.0.0.1:8000
+            # The browser reaches the API through the frontend sidecar using
+            # the Cloud Run service origin. Spring's CORS filter must allow
+            # that origin for JSON requests carrying an Origin header.
+            - name: EPICURE_ALLOWED_ORIGINS
+              value: https://epicure-748506287944.europe-west1.run.app
             - name: JAVA_TOOL_OPTIONS
               value: -XX:ActiveProcessorCount=1
           resources:
